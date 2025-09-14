@@ -31,7 +31,11 @@ const busSchema = new Schema({
         password: {
             type: String,
             required: true
-        }
+        },
+        currentLocation: {
+    latitude: Number,
+    longitude: Number
+}
 }, { timestamps: true });
 
 

@@ -43,6 +43,7 @@ ConnectDb();
 import userRouter from "./src/routes/user.route.js";
 import busRouter from "./src/routes/bus.route.js";
 
+
 // routs declraration
 
 app.use("/api/v1/bus", busRouter);

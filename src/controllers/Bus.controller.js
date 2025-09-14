@@ -28,7 +28,11 @@ const {BusNumber, PickupPoint, DropPoint, DepartureTime, ArrivalTime, DriverEmai
         ArrivalTime,
         DriverEmail,
         password,
-        role: "driver"
+        role: "driver",
+        currentLocation: {
+    latitude: req.body.latitude || 0,
+    longitude: req.body.longitude || 0
+  }
 
     })
     
@@ -45,6 +49,26 @@ const {BusNumber, PickupPoint, DropPoint, DepartureTime, ArrivalTime, DriverEmai
 ))
 });
 
+const searchBuses = asyncHandler( async (req, res) => {
+    const { PickupPoint, DropPoint } = req.query;
+
+    const buses = await Bus.find({pickupPoint: PickupPoint, dropPoint: DropPoint});
+  return  res.status(200).json(
+    new ApiResponse(200, buses, "Buses fetched successfully"
+  ))
+});
+
+const getBusLocation = asyncHandler( async (req, res) => {
+    const { id } = req.params;
+    const bus = await Bus.findById(id);
+    if(!bus) {
+        throw new ApiError(404, "Bus not found")
+    };
+    return res.status(200).json(
+        new ApiResponse(200, { Location: bus.currentLocation}, "Bus location fetched successfully"
+    ))
+})
+
     
 
-export { registerBus };
+export { registerBus, searchBuses, getBusLocation };
