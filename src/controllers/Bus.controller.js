@@ -31,10 +31,10 @@ const {BusNumber, PickupPoint, DropPoint, DepartureTime, ArrivalTime, DriverEmai
         role: "driver",
         currentLocation: {
     latitude: req.body.latitude || 0,
-    longitude: req.body.longitude || 0
+    longitude: req.body.longitude || 0,
   }
 
-    })
+    });
     
 
     const busCreated  = await Bus.findById(bus._id).select( "-password ");

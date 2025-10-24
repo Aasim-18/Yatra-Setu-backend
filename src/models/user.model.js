@@ -30,10 +30,16 @@ const userSchema = new Schema(
    },
 
   password: {
-
    type: String,
    required: true
   },
+   ConfirmPassword: {
+   type: String,
+   required: true
+  },
+  
+  
+
    role: { type: String,
      enum: ["user", "driver"],
       default: "user" 

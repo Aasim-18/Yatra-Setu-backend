@@ -38,6 +38,7 @@ const userCreated = await User.findById(user._id).select(
 
 if (!userCreated) {
 throw new ApiError(500, "Somthing went wrong while creating user")
+
  }
 
 return res.status(201).json(
@@ -91,4 +92,54 @@ return res
 
 });
 
- export { registerUser, Userlogin }
+  const forgetPassword = asyncHandler( async (req, res) => {
+
+       const {username, Password} = req.body;
+
+        const user =  await User.findOne({
+         $or: [{username}]
+      })
+
+     const ispasswordCorrect = await  user.validatePassword(Password)
+
+    if (!ispasswordCorrect) {
+      throw new ApiError(401, "Please write correct password")
+    }
+
+     const {newPassword, ConfirmPassword} = req.body;
+
+    if (!newPassword) {
+      throw new ApiError(401, "Enter NewPassword to Procced")
+    };
+
+     if (newPassword !== ConfirmPassword) {
+      throw new ApiError(402, "Both Entry should be same")
+     };
+
+     const PasswordChanged = await User.updateOne(
+        { _id: ObjectId(user._id) }, 
+   { $set: { Password: newPassword } }
+     )
+    
+    if (!PasswordChanged) {
+      throw new ApiError(500, "Internal Server Error")
+    }
+    
+    const options = {
+
+ httpOnly: true,
+ secure: true
+ }
+
+return res
+.status(200)
+.json(
+   new ApiResponse(200, PasswordChanged, 
+  "Password Changed Successfully" ) 
+ )
+
+  })
+
+
+
+ export { registerUser, Userlogin, forgetPassword }
